@@ -3,11 +3,15 @@ const express = require('express')
 const database = require('./config/database')
 require('dotenv').config()
 const app = express()
-const route = require('./api/v1/routes/index.route')
+const routeApiVer1 = require('./api/v1/routes/index.route')
+const bodyParser = require('body-parser')
 port = process.env.PORT
 database.connect()
 
-route(app)
+// parse application/json
+app.use(bodyParser.json())
+
+routeApiVer1(app)
 
 app.listen(port, () => {
   console.log(`Server đang chạy tại http://localhost:${port}`)
