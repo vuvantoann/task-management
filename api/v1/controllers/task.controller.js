@@ -1,10 +1,16 @@
 const Task = require('../models/task.model')
 
 const paginationHelper = require('../../../helper/pagination')
+const searchHelper = require('../../../helper/search')
 //[GET]/api/v1/tasks
 module.exports.task = async (req, res) => {
   let find = {
     deleted: false,
+  }
+  // Tìm kiếm
+  const objectSearch = searchHelper(req.query)
+  if (objectSearch.regex) {
+    find.title = objectSearch.regex
   }
 
   //Bộ lọc theo trạng thái
@@ -22,7 +28,7 @@ module.exports.task = async (req, res) => {
     req.query,
     countTasks
   )
-  console.log(objectPagination)
+  console.log(objectSearch)
   //Sắp xếp theo tiêu chí
   let sort = {}
 
