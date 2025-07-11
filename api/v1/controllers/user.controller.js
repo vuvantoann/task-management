@@ -19,8 +19,13 @@ module.exports.register = async (req, res) => {
     })
   } else {
     req.body.password = md5(req.body.password)
+    const newUser = new User({
+      fullName: req.body.fullName,
+      email: req.body.email,
+      password: req.body.password,
+      token: generateHelper.generateRandomString(30),
+    })
 
-    const newUser = new User(req.body)
     await newUser.save()
     const token = newUser.token
     res.cookie('token', token)
@@ -180,15 +185,9 @@ module.exports.resetPassword = async (req, res) => {
 
 //[get]/api/v1/user/detail
 module.exports.detail = async (req, res) => {
-  const token = req.cookies.token
-  const infoUser = await User.findOne({
-    token: token,
-    deleted: false,
-  }).select('-password -token')
-
   res.json({
     code: 200,
     message: 'thành công',
-    infoUser: infoUser,
+    infoUser: req.user,
   })
 }
