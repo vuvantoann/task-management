@@ -5,6 +5,7 @@ const searchHelper = require('../../../helper/search')
 //[GET]/api/v1/tasks
 module.exports.task = async (req, res) => {
   let find = {
+    $or: [{ createdBy: req.user.id }, { listUser: { $in: [req.user.id] } }],
     deleted: false,
   }
   // Tìm kiếm
